@@ -1,9 +1,18 @@
 const express = require('express');
-const app = express();
 const bodyParser = require('body-parser');
+const mysql = require('mysql2');
+
+const app = express();
+app.listen(3000);
+
+app.use(express.static('views'))
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-const mysql = require('mysql2');
+
+// Redirection vers index
+app.get('/', (req, res) => { 
+    res.sendFile("index.html");
+});
 
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*'); // reception de n'importe quel serveur
@@ -26,6 +35,8 @@ connection.connect((err) => {
     }
     console.log("Connected!");
 });
+
+
 
 // Ajout d'un enregistrement
 app.post('/users', (req, res) => {
@@ -67,7 +78,7 @@ app.put('/users/:id', (req, res) => {
      });
 });
 
-const PORT = process.env.PORT || process.argv[2] || 3000;
-app.listen(PORT, ()=>console.log(`Server is running on port ${PORT}.`));
+// const PORT = process.env.PORT || process.argv[2] || 3000;
+// app.listen(PORT, ()=>console.log(`Server is running on port ${PORT}.`));
 
 // connection.end();
